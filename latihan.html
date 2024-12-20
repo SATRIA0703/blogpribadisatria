@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Data Mahasiswa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+        }
+
+        .form-container,
+        .output-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .output-container div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Form Input -->
+    <div class="form-container">
+        <h2>Input Data</h2>
+        <form id="data-form">
+            <label for="name">Nama:</label>
+            <input type="text" id="name" placeholder="Masukkan nama" required>
+
+            <label for="registration-code">Kode Registrasi:</label>
+            <select id="registration-code" required>
+                <option value="">-- Pilih Kode Registrasi --</option>
+                <option value="2022hk103">2022HK103</option>
+                <option value="2023tc114">2023TI114</option>
+                <option value="2021m1005">2021MI005</option>
+                <option value="22101ti123">22101TI123</option>
+            </select>
+
+            <label for="course-code">Kode Mata Kuliah:</label>
+            <select id="course-code" required>
+                <option value="">-- Pilih Kode Mata Kuliah --</option>
+                <option value="mkdv2">mkdv2</option>
+                <option value="mkp12">mkp12</option>
+                <option value="mkin3">mkin3</option>
+            </select>
+
+            <button type="button" id="submit-btn">Kirim</button>
+            <button type="button" id="reset-btn" style="background-color: red;">Hapus</button>
+        </form>
+    </div>
+
+    <!-- Output -->
+    <div class="output-container">
+        <h2>Hasil Data</h2>
+        <div><strong>Nama:</strong> <span id="output-name">-</span></div>
+        <div><strong>Jurusan:</strong> <span id="output-jurusan">-</span></div>
+        <div><strong>No. Urut:</strong> <span id="output-number">-</span></div>
+        <div><strong>Mata Kuliah:</strong> <span id="output-course">-</span></div>
+        <div><strong>Kode Registrasi:</strong> <span id="output-reg-code">-</span></div>
+        <div><strong>Angkatan:</strong> <span id="output-year">-</span></div>
+        <div><strong>Kode Mata Kuliah:</strong> <span id="output-course-code">-</span></div>
+        <div><strong>SKS:</strong> <span id="output-sks">3</span></div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("submit-btn").addEventListener("click", function () {
+        // Ambil nilai input
+        const name = document.getElementById("name").value;
+        const registrationCode = document.getElementById("registration-code").value;
+        const courseCode = document.getElementById("course-code").value;
+
+        if (!name || !registrationCode || !courseCode) {
+            alert("Harap isi semua data sebelum mengirim!");
+            return;
+        }
+
+        // Ekstrak data jurusan dan angkatan
+        const jurusanCode = registrationCode.slice(4, 6).toUpperCase();
+        let jurusan = "";
+        if (jurusanCode === "HK") jurusan = "HUKUM";
+        else if (jurusanCode === "TI") jurusan = "TEKNIK INFORMATIKA";
+        else if (jurusanCode === "MI") jurusan = "MANAJEMEN INFORMATIKA";
+
+        const year = registrationCode.slice(0, 4);
+        const number = registrationCode.slice(4, -2);
+
+        // Ekstrak mata kuliah dan SKS
+        const coursePrefix = courseCode.slice(0, 4).toUpperCase();
+        let mataKuliah = "";
+        let sks = "3"; // Default SKS
+
+        if (coursePrefix === "MKDV") mataKuliah = "DASAR UMUM";
+        else if (coursePrefix === "MKPI") mataKuliah = "PILIHAN";
+        else if (coursePrefix === "MKIN") mataKuliah = "INTI";
+
+        // SKS diambil dari karakter terakhir kode mata kuliah
+        if (courseCode.length > 4) {
+            sks = courseCode.slice(-1);
+        }
+
+        // Tampilkan output
+        document.getElementById("output-name").innerText = name.toUpperCase();
+        document.getElementById("output-jurusan").innerText = jurusan;
+        document.getElementById("output-number").innerText = number;
+        document.getElementById("output-course").innerText = mataKuliah;
+        document.getElementById("output-reg-code").innerText = registrationCode;
+        document.getElementById("output-year").innerText = year;
+        document.getElementById("output-course-code").innerText = courseCode.toUpperCase();
+        document.getElementById("output-sks").innerText = sks;
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", function () {
+        // Reset form input
+        document.getElementById("data-form").reset();
+
+        // Reset output
+        document.getElementById("output-name").innerText = "-";
+        document.getElementById("output-jurusan").innerText = "-";
+        document.getElementById("output-number").innerText = "-";
+        document.getElementById("output-course").innerText = "-";
+        document.getElementById("output-reg-code").innerText = "-";
+        document.getElementById("output-year").innerText = "-";
+        document.getElementById("output-course-code").innerText = "-";
+        document.getElementById("output-sks").innerText = "3";
+    });
+</script>
+
+</body>
+</html>
